@@ -19,7 +19,7 @@ Public Class Login
             Using connection As New SqlConnection(connString)
                 Dim query = "
                 SELECT [LibrarianId],[FirstName],[LastName],[PhoneNumber],[Role] FROM [Librarians] WHERE [Email]=@email AND
-                [Password]=@pass and Role='user'
+                [Password]=@pass and Role='Staff'
 "
                 Using command As New SqlCommand(query, connection)
                     Try
@@ -56,7 +56,7 @@ Public Class Login
             Using connection As New SqlConnection(connString)
                 Dim query = "
                 SELECT [LibrarianId],[FirstName],[LastName],[PhoneNumber],[Role] FROM [Librarians] WHERE [Email]=@email AND
-                [Password]=@pass and Role='admin'
+                [Password]=@pass and Role='Admin'
 "
                 Using command As New SqlCommand(query, connection)
                     Try

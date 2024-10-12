@@ -106,7 +106,7 @@ Public Class Barcode
         Using saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|Bitmap Image|*.bmp"
             saveFileDialog.Title = "Save Barcode Image"
-            saveFileDialog.FileName = bookTitle & "barcode.png"
+            saveFileDialog.FileName = bookTitle & "-barcode.png"
 
             If saveFileDialog.ShowDialog() = DialogResult.OK Then
                 barcodeBitmap.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Png)

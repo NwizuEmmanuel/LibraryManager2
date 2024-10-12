@@ -62,6 +62,7 @@ Partial Class MainMenu
         Me.BarcodeGeneratorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SelectAllCheckBox = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -148,6 +149,7 @@ Partial Class MainMenu
         '
         Me.Panel2.BackgroundImage = Global.LibraryManager.My.Resources.Resources._1
         Me.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Panel2.Controls.Add(Me.SelectAllCheckBox)
         Me.Panel2.Controls.Add(Me.ManualModeCheckBox)
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.BarcodeTextBox)
@@ -522,6 +524,18 @@ Partial Class MainMenu
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(58, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
+        'SelectAllCheckBox
+        '
+        Me.SelectAllCheckBox.AutoSize = True
+        Me.SelectAllCheckBox.BackColor = System.Drawing.Color.Transparent
+        Me.SelectAllCheckBox.ForeColor = System.Drawing.Color.White
+        Me.SelectAllCheckBox.Location = New System.Drawing.Point(555, 10)
+        Me.SelectAllCheckBox.Name = "SelectAllCheckBox"
+        Me.SelectAllCheckBox.Size = New System.Drawing.Size(82, 20)
+        Me.SelectAllCheckBox.TabIndex = 3
+        Me.SelectAllCheckBox.Text = "Select All"
+        Me.SelectAllCheckBox.UseVisualStyleBackColor = False
+        '
         'MainMenu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -597,4 +611,5 @@ Partial Class MainMenu
     Friend WithEvents ReturnStudentIdTextBox As TextBox
     Friend WithEvents BarcodeGeneratorToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SelectAllCheckBox As CheckBox
 End Class

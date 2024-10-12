@@ -228,7 +228,7 @@ Partial Class AddLibrarian
         'RoleComboBox
         '
         Me.RoleComboBox.FormattingEnabled = True
-        Me.RoleComboBox.Items.AddRange(New Object() {"admin", "user"})
+        Me.RoleComboBox.Items.AddRange(New Object() {"Admin", "Staff"})
         Me.RoleComboBox.Location = New System.Drawing.Point(110, 158)
         Me.RoleComboBox.Name = "RoleComboBox"
         Me.RoleComboBox.Size = New System.Drawing.Size(265, 26)

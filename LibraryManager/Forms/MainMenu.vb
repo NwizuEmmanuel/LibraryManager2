@@ -12,9 +12,9 @@ Public Class MainMenu
         BarcodeTextBox.Focus()
         ScannerDataTable.ReadOnly = True
         ScannerDataTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
-        If Whoami.Role = "admin" Then
+        If Whoami.Role = "Admin" Then
             MenuStrip1.Enabled = True
-        ElseIf Whoami.Role = "user" Then
+        ElseIf Whoami.Role = "Staff" Then
             MenuStrip1.Enabled = False
         End If
     End Sub
@@ -62,7 +62,7 @@ Public Class MainMenu
                 End If
             End If
         Next
-        Return False ' No duplicate found
+        Return False ' No duplicat  e found
     End Function
 
 
@@ -153,6 +153,8 @@ Public Class MainMenu
 
     Private Function BorrowBook(isbnValue As String, studentId As Integer, borrowDate As Date, dueDate As Date, librarianId As Integer) As Boolean
         Dim hasNoError = True
+
+        'record borrowed book to borrows
         Using connection As New SqlConnection(connectionString)
             Using command As New SqlCommand(
             "INSERT INTO Borrows (BookId, StudentId, BorrowDate, DueDate, LibrarianId) " &
@@ -173,6 +175,8 @@ Public Class MainMenu
                     MessageBox.Show("Error while borrowing the book: " & ex.Message)
                 End Try
             End Using
+
+            'update book quantity
             Using command As New SqlCommand("UPDATE Books SET Quantity=Quantity - 1 WHERE ISBN=@isbn", connection)
                 Try
                     command.Parameters.AddWithValue("@isbn", isbnValue)
@@ -188,6 +192,8 @@ Public Class MainMenu
 
     Private Function ReturnBook(isbnValue As String, studentId As Integer, returnDate As Date) As Boolean
         Dim hasNoError = True
+
+        'record return books to borrows
         Using connection As New SqlConnection(connectionString)
             Using command As New SqlCommand(
             "UPDATE Borrows SET ReturnDate = @ReturnDate " &
@@ -210,6 +216,8 @@ Public Class MainMenu
                     hasNoError = False
                 End Try
             End Using
+
+            'update books quantity
             Using command As New SqlCommand("UPDATE Books SET Quantity=Quantity + 1 WHERE ISBN=@isbn", connection)
                 Try
                     command.Parameters.AddWithValue("@isbn", isbnValue)
@@ -254,8 +262,9 @@ Public Class MainMenu
 
 
     Private Sub BorrowBookButton_Click(sender As Object, e As EventArgs) Handles BorrowBookButton.Click
+        Dim _isSuccessful = False
         ' Loop through each row in the DataGridView
-        For Each row As DataGridViewRow In ScannerDataTable.Rows
+        For Each row As DataGridViewRow In ScannerDataTable.SelectedRows
             ' Skip the new row if it's a new row being added
             If Not row.IsNewRow Then
                 ' Access the value in the specified column
@@ -270,18 +279,24 @@ Public Class MainMenu
                     ' Proceed to borrow the book
                     ' (Insert borrow record in the Borrows table)
                     If BorrowBook(bookISBN, studentId, borrowDate, dueDate, librarianId) Then
-                        MessageBox.Show("Book(s) borrowed successfully.")
+                        _isSuccessful = True
                     End If
                 Else
                     MessageBox.Show("The student has already borrowed this book and has not returned it.")
                 End If
             End If
         Next
-
+        If _isSuccessful = True Then
+            MessageBox.Show("Book(s) borrowed successfully.")
+        End If
+        If ScannerDataTable.SelectedRows.Count = 0 Then
+            MessageBox.Show("Select at least one row.")
+        End If
     End Sub
 
     Private Sub ReturnBookButton_Click(sender As Object, e As EventArgs) Handles ReturnBookButton.Click
-        For Each row As DataGridViewRow In ScannerDataTable.Rows
+        Dim _isSuccessful = False
+        For Each row As DataGridViewRow In ScannerDataTable.SelectedRows
             ' Skip the new row if it's a new row being added
             If Not row.IsNewRow Then
                 Dim isbnValue As String = row.Cells("ISBN").Value.ToString()
@@ -290,10 +305,16 @@ Public Class MainMenu
                 Dim returnDate As Date = DateTime.Now
 
                 If ReturnBook(isbnValue, studentId, returnDate) Then
-                    MessageBox.Show("Book(s) returned successfully.")
+                    _isSuccessful = True
                 End If
             End If
         Next
+        If _isSuccessful = True Then
+            MessageBox.Show("Book(s) returned successfully.")
+        End If
+        If ScannerDataTable.SelectedRows.Count = 0 Then
+            MessageBox.Show("Select at least one row.")
+        End If
     End Sub
 
     Private Sub DeleteBookButton_Click(sender As Object, e As EventArgs) Handles DeleteBookButton.Click
@@ -309,5 +330,15 @@ Public Class MainMenu
 
     Private Sub BarcodeGeneratorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BarcodeGeneratorToolStripMenuItem.Click
         Barcode.ShowDialog()
+    End Sub
+
+    Private Sub SelectAllCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles SelectAllCheckBox.CheckedChanged
+        If SelectAllCheckBox.Checked Then
+            ScannerDataTable.SelectAll()
+        Else
+            For Each row As DataGridViewRow In ScannerDataTable.Rows
+                row.Selected = False
+            Next
+        End If
     End Sub
 End Class
