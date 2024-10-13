@@ -263,6 +263,9 @@ Public Class MainMenu
 
     Private Sub BorrowBookButton_Click(sender As Object, e As EventArgs) Handles BorrowBookButton.Click
         Dim _isSuccessful = False
+        If ScannerDataTable.SelectedRows.Count = 0 Then
+            MessageBox.Show("Select at least one row.")
+        End If
         ' Loop through each row in the DataGridView
         For Each row As DataGridViewRow In ScannerDataTable.SelectedRows
             ' Skip the new row if it's a new row being added
@@ -280,6 +283,8 @@ Public Class MainMenu
                     ' (Insert borrow record in the Borrows table)
                     If BorrowBook(bookISBN, studentId, borrowDate, dueDate, librarianId) Then
                         _isSuccessful = True
+                        'romove row
+                        ScannerDataTable.Rows.RemoveAt(row.Index)
                     End If
                 Else
                     MessageBox.Show("The student has already borrowed this book and has not returned it.")
@@ -289,13 +294,15 @@ Public Class MainMenu
         If _isSuccessful = True Then
             MessageBox.Show("Book(s) borrowed successfully.")
         End If
-        If ScannerDataTable.SelectedRows.Count = 0 Then
-            MessageBox.Show("Select at least one row.")
-        End If
+
     End Sub
 
     Private Sub ReturnBookButton_Click(sender As Object, e As EventArgs) Handles ReturnBookButton.Click
         Dim _isSuccessful = False
+        If ScannerDataTable.SelectedRows.Count = 0 Then
+            MessageBox.Show("Select at least one row.")
+        End If
+
         For Each row As DataGridViewRow In ScannerDataTable.SelectedRows
             ' Skip the new row if it's a new row being added
             If Not row.IsNewRow Then
@@ -306,15 +313,15 @@ Public Class MainMenu
 
                 If ReturnBook(isbnValue, studentId, returnDate) Then
                     _isSuccessful = True
+                    'remove row
+                    ScannerDataTable.Rows.RemoveAt(row.Index)
                 End If
             End If
         Next
         If _isSuccessful = True Then
             MessageBox.Show("Book(s) returned successfully.")
         End If
-        If ScannerDataTable.SelectedRows.Count = 0 Then
-            MessageBox.Show("Select at least one row.")
-        End If
+
     End Sub
 
     Private Sub DeleteBookButton_Click(sender As Object, e As EventArgs) Handles DeleteBookButton.Click
